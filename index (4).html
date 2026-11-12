@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0e14">
+<title>AlphaTechForge | Web Development, Cybersecurity & IT Services</title>
+<meta name="description" content="AlphaTechForge delivers professional websites, cybersecurity documentation, IT support, business presentations and Excel data solutions, with clear scope, fair estimates and direct communication.">
+<link rel="canonical" href="https://alphatechforge.com/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AlphaTechForge">
+<meta property="og:title" content="AlphaTechForge | Web Development, Cybersecurity & IT Services">
+<meta property="og:description" content="Professional websites, security documentation, IT support and data solutions, scoped clearly and delivered with care.">
+<meta property="og:url" content="https://alphatechforge.com/">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"AlphaTechForge","url":"https://alphatechforge.com/","description":"Web design and development, cybersecurity documentation, IT support, presentations and Excel data solutions.","foundingDate":"2026","email":"sow.al@northeastern.edu"}</script>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0b0e14;--bg-alt:#0f141c;--surface:#131923;--surface-2:#1a212d;
+  --gold:#d9b461;--gold-2:#f0d491;--gold-dim:#d9b46133;
+  --text:#f5f3ee;--muted:#aeb3bd;--line:#262d39;--line-2:#343c4a;
+  --radius:14px;--shadow:0 18px 40px -18px #000c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img,svg{display:block}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1160px,calc(100% - 48px));margin-inline:auto}
+.skip{position:absolute;left:12px;top:-100px;background:var(--gold);color:#111;padding:10px 14px;border-radius:6px;z-index:100;font-weight:700}
+.skip:focus{top:12px}
+
+/* Header */
+header{position:sticky;top:0;z-index:30;background:#0b0e14e6;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(14px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+.brand b{color:var(--gold);font-weight:700}
+.brand svg{width:32px;height:36px}
+.navlinks{display:flex;align-items:center;gap:30px}
+.navlinks>a:not(.btn){font-size:14.5px;color:#cdd1d8;transition:color .15s}
+.navlinks>a:not(.btn):hover{color:var(--text)}
+.menu-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface)}
+.menu-toggle svg{width:20px;height:20px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:11px 22px;border-radius:10px;border:1px solid var(--line-2);font-weight:600;font-size:15px;background:transparent;transition:background .15s,border-color .15s,color .15s,transform .15s}
+.btn:hover{border-color:var(--gold);color:var(--gold-2)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#12141a}
+.btn.primary:hover{background:var(--gold-2);border-color:var(--gold-2);color:#12141a}
+.btn.small{min-height:40px;padding:8px 16px;font-size:14px}
+.btn svg{width:16px;height:16px}
+
+/* Type */
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-size:clamp(40px,5.6vw,66px);line-height:1.06;letter-spacing:-.035em;font-weight:750;margin:18px 0 22px}
+h2{font-size:clamp(30px,3.6vw,42px);line-height:1.15;letter-spacing:-.025em;font-weight:700;margin:12px 0 16px}
+h3{font-size:19px;line-height:1.3;letter-spacing:-.01em;font-weight:650;margin:0 0 8px}
+.accent{color:var(--gold)}
+.lead{font-size:19px;line-height:1.6;color:var(--muted);max-width:620px;margin:0}
+.sub{font-size:17px;color:var(--muted);max-width:680px;margin:0}
+.section-head{max-width:720px}
+
+/* Hero */
+.hero{position:relative;padding:104px 0 96px;background:radial-gradient(900px 480px at 85% 0%,#2a2318 0,transparent 60%),radial-gradient(700px 420px at 0% 100%,#141d2b 0,transparent 60%);border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1.25fr .85fr;gap:56px;align-items:center}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.hero-card{background:linear-gradient(180deg,#161d28,#121821);border:1px solid var(--line-2);border-radius:18px;padding:30px;box-shadow:var(--shadow)}
+.hero-card h2{font-size:15px;letter-spacing:.02em;font-weight:650;margin:0 0 18px;color:var(--text)}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:15px}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:12px;color:#d3d6dc;font-size:15px;line-height:1.5}
+.checks li strong{display:block;color:var(--text);font-weight:600}
+.checks li span{color:var(--muted);font-size:14px}
+.tick{width:22px;height:22px;border-radius:50%;background:var(--gold-dim);display:grid;place-items:center;margin-top:1px}
+.tick svg{width:12px;height:12px}
+
+/* Sections */
+section{padding:96px 0}
+.alt{background:var(--bg-alt);border-block:1px solid var(--line)}
+
+/* Services */
+.services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:44px}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:border-color .2s,transform .2s,box-shadow .2s}
+.card:hover{border-color:#5b4e33;transform:translateY(-3px);box-shadow:var(--shadow)}
+.icon{width:44px;height:44px;border-radius:11px;background:var(--gold-dim);display:grid;place-items:center;margin-bottom:20px}
+.icon svg{width:22px;height:22px}
+.card p{color:var(--muted);margin:0 0 16px;font-size:15.5px}
+.card ul{margin:0 0 22px;padding:0;list-style:none;display:grid;gap:7px;font-size:14.5px;color:#c9cdd4}
+.card ul li{position:relative;padding-left:16px}
+.card ul li:before{content:"";position:absolute;left:0;top:.68em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.text-link{margin-top:auto;align-self:start;display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:14.5px;font-weight:600;background:none;border:0;padding:4px 0}
+.text-link:hover{color:var(--gold-2)}
+.text-link svg{width:15px;height:15px;transition:transform .15s}
+.text-link:hover svg{transform:translateX(3px)}
+
+/* Principles */
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:44px}
+.principle{padding:26px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.principle p{color:var(--muted);margin:0;font-size:15px}
+.principle .icon{margin-bottom:16px}
+
+/* Process */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:44px;counter-reset:step}
+.step{position:relative;padding-top:26px;border-top:1px solid var(--line-2)}
+.step:before{counter-increment:step;content:"0" counter(step);position:absolute;top:-1px;left:0;padding-top:10px;border-top:2px solid var(--gold);width:44px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--gold)}
+.step h3{margin-top:14px}
+.step p{color:var(--muted);margin:0;font-size:15px}
+
+/* About */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.about p{color:var(--muted);margin:0 0 16px;font-size:17px}
+.facts{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.fact{background:var(--surface);padding:22px 24px;display:grid;grid-template-columns:150px 1fr;gap:16px;font-size:15px}
+.fact dt{color:var(--muted)}
+.fact dd{margin:0;color:var(--text);font-weight:500}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px}
+.faq details{border-bottom:1px solid var(--line);padding:20px 0}
+.faq details:first-child{padding-top:4px}
+.faq summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:20px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";color:var(--gold);font-size:22px;line-height:1;font-weight:400;transition:transform .2s}
+.faq details[open] summary:after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);margin:12px 0 0;max-width:620px}
+
+/* Contact */
+.contact{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;border:1px solid #4a3f2a;border-radius:20px;padding:48px;background:linear-gradient(135deg,#1f1b13 0%,#121923 60%)}
+.next{list-style:none;margin:28px 0;padding:0;display:grid;gap:14px;counter-reset:n}
+.next li{display:grid;grid-template-columns:28px 1fr;gap:12px;color:#d3d6dc;font-size:15px}
+.next li:before{counter-increment:n;content:counter(n);width:28px;height:28px;border-radius:50%;border:1px solid var(--gold);color:var(--gold);display:grid;place-items:center;font-size:13px;font-weight:700}
+.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-top:24px;border-top:1px solid var(--line-2)}
+.email-row small{display:block;width:100%;color:var(--muted);font-size:13px}
+.email{color:var(--gold-2);font-weight:600;overflow-wrap:anywhere}
+.email:hover{text-decoration:underline}
+.form{display:grid;gap:16px;align-content:start}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:grid;gap:7px}
+.field label{font-size:13.5px;font-weight:600;color:#d8dbe0}
+.field input,.field select,.field textarea{width:100%;background:#0d1219;border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;min-height:48px;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.field textarea{min-height:140px;resize:vertical}
+.field ::placeholder{color:#7f8692}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.form .btn{justify-self:start}
+.fine{font-size:12.5px;color:var(--muted);margin:0}
+.status{font-size:14px;color:var(--gold-2);min-height:20px;margin:0}
+.status.error{color:#f0a08a}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);font-size:14px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.foot p{margin:14px 0 0;max-width:340px}
+.foot h4{margin:0 0 14px;color:var(--text);font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.foot a:hover{color:var(--text)}
+.legal{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:44px;padding-top:24px;border-top:1px solid var(--line);font-size:13px}
+
+.back-top{position:fixed;right:22px;bottom:22px;z-index:20;display:grid;place-items:center;border:1px solid var(--line-2);background:var(--surface-2);color:var(--gold-2);border-radius:50%;width:44px;height:44px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.back-top svg{width:18px;height:18px}
+.back-top.visible{opacity:1;pointer-events:auto;transform:none}
+
+@media(max-width:980px){
+  .hero-grid,.about,.faq-grid,.contact{grid-template-columns:1fr}
+  .hero-grid{gap:44px}.about,.faq-grid{gap:32px}
+  .services{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .principles,.steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps{row-gap:36px}
+  .foot{grid-template-columns:1fr 1fr}.foot>div:first-child{grid-column:1/-1}
+}
+@media(max-width:760px){
+  .wrap{width:calc(100% - 36px)}
+  .nav{min-height:66px}
+  .menu-toggle{display:flex}
+  .navlinks{display:none;position:absolute;top:66px;left:0;right:0;padding:12px 18px 20px;background:#0f141cfa;border-bottom:1px solid var(--line);box-shadow:var(--shadow);flex-direction:column;align-items:stretch;gap:2px}
+  .navlinks.open{display:flex}
+  .navlinks>a:not(.btn){padding:12px 4px;font-size:16px;border-bottom:1px solid var(--line)}
+  .navlinks .btn{margin-top:12px}
+  .hero{padding:72px 0 64px}
+  .lead{font-size:17px}
+  section{padding:68px 0}
+  .services,.principles,.steps,.row{grid-template-columns:1fr}
+  .contact{padding:26px;gap:32px}
+  .fact{grid-template-columns:1fr;gap:4px}
+  .actions .btn{flex:1 1 200px}
+  .foot{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="#d9b461" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#home" aria-label="AlphaTechForge home">
+      <svg viewBox="0 0 40 46" fill="none" aria-hidden="true"><path d="M20 2 36 8v14c0 10-6 17-16 22C10 39 4 32 4 22V8L20 2Z" stroke="#D9B461" stroke-width="3"/><path d="m11 32 9-21 9 21M15 25h10" stroke="#F5F3EE" stroke-width="3.5" stroke-linecap="square"/><path d="M17 25h6" stroke="#F47A3B" stroke-width="3.5"/></svg>
+      <span>Alpha<b>Tech</b>Forge</span>
+    </a>
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="navlinks">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="menu-icon" d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="#services">Services</a>
+      <a href="#approach">Approach</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn primary small" href="#contact">Request a Quote</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Web · Security · IT · Data</span>
+      <h1>Technology solutions, <span class="accent">built properly.</span></h1>
+      <p class="lead">AlphaTechForge helps small businesses, startups and professionals launch credible websites, strengthen their security posture, and get IT and data work done. Every project comes with a clear scope, a fair estimate and direct communication from start to finish.</p>
+      <div class="actions">
+        <a class="btn primary" href="#contact">Request a Quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn" href="#services">View Services</a>
+      </div>
+    </div>
+    <aside class="hero-card" aria-labelledby="included-title">
+      <h2 id="included-title">Every engagement includes</h2>
+      <ul class="checks">
+        <li><span class="tick"><svg aria-hidden="true"><use href="#i-check"/></svg></span><div><strong>A written scope and estimate</strong><span>You know exactly what's being delivered before work begins.</span></div></li>
+        <li><span class="tick"><svg aria-hidden="true"><use href="#i-check"/></svg></span><div><strong>One point of contact</strong><span>You work directly with the person doing the work.</span></div></li>
+        <li><span class="tick"><svg aria-hidden="true"><use href="#i-check"/></svg></span><div><strong>Regular progress updates</strong><span>No guessing where your project stands.</span></div></li>
+        <li><span class="tick"><svg aria-hidden="true"><use href="#i-check"/></svg></span><div><strong>A clean handover</strong><span>Final files, access and notes so you're never locked in.</span></div></li>
+      </ul>
+    </aside>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Services</span>
+      <h2>Practical expertise across your digital needs.</h2>
+      <p class="sub">From a new website to a security review or a reporting dashboard, each project is scoped to your goals and delivered to a professional standard.</p>
+    </div>
+    <div class="services">
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8M12 18v3"/></svg></div>
+        <h3>Web Design &amp; Development</h3>
+        <p>Fast, responsive websites that present your business clearly and convert visitors into enquiries.</p>
+        <ul><li>Business sites &amp; landing pages</li><li>Portfolios and small storefronts</li><li>Hand-coded, no page-builder lock-in</li></ul>
+        <button class="text-link service-quote" data-service="Web Design & Development" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </article>
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Cybersecurity Solutions</h3>
+        <p>Clear, actionable security guidance that helps you reduce risk and meet your obligations.</p>
+        <ul><li>Policies &amp; security documentation</li><li>Basic risk reviews</li><li>Staff awareness materials</li></ul>
+        <button class="text-link service-quote" data-service="Cybersecurity Solutions" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </article>
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.8-.7-.7-2.8 2.5-2.5Z"/></svg></div>
+        <h3>IT Support &amp; Troubleshooting</h3>
+        <p>Responsive help that resolves technical issues and keeps your systems running smoothly.</p>
+        <ul><li>Remote troubleshooting</li><li>Software &amp; device setup</li><li>Basic network configuration</li></ul>
+        <button class="text-link service-quote" data-service="IT Support & Troubleshooting" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </article>
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div>
+        <h3>Presentations &amp; Documents</h3>
+        <p>Polished, well-structured materials that communicate your ideas with confidence.</p>
+        <ul><li>Pitch and slide decks</li><li>Business reports</li><li>Technical writing &amp; guides</li></ul>
+        <button class="text-link service-quote" data-service="Presentations & Documents" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </article>
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Excel &amp; Data Solutions</h3>
+        <p>Organised, reliable data and reporting tools that make decisions easier.</p>
+        <ul><li>Spreadsheet builds &amp; cleanup</li><li>Automated reports</li><li>Clear, usable dashboards</li></ul>
+        <button class="text-link service-quote" data-service="Excel & Data Solutions" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </article>
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg></div>
+        <h3>Custom Projects</h3>
+        <p>Have a need that spans several areas? We'll help you define it and propose a realistic plan.</p>
+        <ul><li>Multi-part digital projects</li><li>Process improvements</li><li>Scoped to your budget</li></ul>
+        <button class="text-link service-quote" data-service="Tailored Digital Project" type="button">Discuss your project <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="approach" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Our approach</span>
+      <h2>The standards behind every project.</h2>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11h6M9 15h4M5 3h14v18H5z"/></svg></div>
+        <h3>Clear scope</h3>
+        <p>Deliverables, timeline and price are agreed in writing up front, so there are no surprises.</p>
+      </div>
+      <div class="principle">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <h3>Security-minded</h3>
+        <p>Good security practice is built into everything we deliver, not added as an afterthought.</p>
+      </div>
+      <div class="principle">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg></div>
+        <h3>Plain language</h3>
+        <p>We explain technical decisions clearly so you can make informed choices.</p>
+      </div>
+      <div class="principle">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7 9 18l-5-5"/></svg></div>
+        <h3>Built to last</h3>
+        <p>Clean, documented work you fully own and can maintain or hand to anyone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Process</span>
+      <h2>A straightforward path from idea to delivery.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Consultation</h3><p>We discuss your goals, requirements, timeline and budget.</p></div>
+      <div class="step"><h3>Proposal</h3><p>You receive a written scope and estimate to review and approve.</p></div>
+      <div class="step"><h3>Build &amp; review</h3><p>We deliver the work with regular updates and agreed rounds of revisions.</p></div>
+      <div class="step"><h3>Handover</h3><p>Final deliverables, access and documentation are handed over to you.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="alt">
+  <div class="wrap about">
+    <div>
+      <span class="eyebrow">About</span>
+      <h2>An independent studio focused on doing the work well.</h2>
+    </div>
+    <div>
+      <p>AlphaTechForge is an independent technology services studio founded in 2026. We work with clients who want dependable, professional results without the overhead of a large agency.</p>
+      <p>Our focus is simple: understand what you actually need, agree on it clearly, and deliver work that is secure, well-crafted and easy to maintain.</p>
+      <dl class="facts">
+        <div class="fact"><dt>Founded</dt><dd>2026</dd></div>
+        <div class="fact"><dt>Specialties</dt><dd>Web, cybersecurity, IT support, data &amp; documents</dd></div>
+        <div class="fact"><dt>Working model</dt><dd>Remote, project-based engagements</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap faq-grid">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Common questions.</h2>
+      <p class="sub">Don't see your question? <a class="email" href="#contact">Get in touch</a> and we'll be happy to help.</p>
+    </div>
+    <div class="faq">
+      <details><summary>What kinds of projects do you take on?</summary><p>Websites, cybersecurity documentation and reviews, IT support, presentations and business documents, Excel and data work, and custom projects that combine several of these.</p></details>
+      <details><summary>How much does a project cost?</summary><p>Pricing depends on scope, complexity and timeline. Share a short description through the inquiry form and you'll receive a written estimate before any work begins.</p></details>
+      <details><summary>How long does a typical project take?</summary><p>Timelines vary with scope. Smaller tasks can often be turned around quickly, while larger builds are planned in stages. Your estimate will include a realistic timeline.</p></details>
+      <details><summary>What technology do you build websites with?</summary><p>Most sites are hand-coded for speed, security and full ownership, with no page-builder subscription required. Where a platform is a better fit for your needs, we'll recommend it and explain why.</p></details>
+      <details><summary>Do I own the finished work?</summary><p>Yes. Once the project is complete and paid for, the deliverables are yours, along with the files, access and notes you need to use them.</p></details>
+      <details><summary>Do you offer ongoing support?</summary><p>Ongoing maintenance and support can be arranged depending on the project. Terms are agreed separately so you only pay for what you need.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="alt">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <span class="eyebrow">Start a project</span>
+        <h2>Let's talk about your project.</h2>
+        <p class="sub">Tell us what you need and when you need it. We'll get back to you with next steps.</p>
+        <ol class="next">
+          <li>We review your inquiry and reply by email.</li>
+          <li>We schedule a short call or exchange to clarify details.</li>
+          <li>You receive a written scope and estimate.</li>
+        </ol>
+        <div class="email-row">
+          <small>Prefer email?</small>
+          <a class="email" id="email-link" href="mailto:sow.al@northeastern.edu?subject=Project%20inquiry%3A%20AlphaTechForge">sow.al@northeastern.edu</a>
+          <button id="copy-email" type="button" class="btn small">Copy address</button>
+          <p id="copy-status" class="status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <form id="quote-form" class="form" method="post" action="/api/contact" novalidate>
+        <div class="row">
+          <div class="field"><label for="client-name">Full name</label><input id="client-name" name="name" autocomplete="name" placeholder="Jane Smith" required maxlength="100"></div>
+          <div class="field"><label for="client-email">Email address</label><input id="client-email" name="email" type="email" autocomplete="email" placeholder="jane@company.com" required maxlength="150"></div>
+        </div>
+        <div class="field"><label for="client-service">Service</label>
+          <select id="client-service" name="service" required>
+            <option value="">Select a service</option>
+            <option>Web Design &amp; Development</option>
+            <option>Cybersecurity Solutions</option>
+            <option>IT Support &amp; Troubleshooting</option>
+            <option>Presentations &amp; Documents</option>
+            <option>Excel &amp; Data Solutions</option>
+            <option value="Tailored Digital Project">Custom Project</option>
+          </select>
+        </div>
+        <div class="field"><label for="client-message">Project details</label><textarea id="client-message" name="message" required minlength="10" maxlength="2500" placeholder="Briefly describe what you need, any deadlines, and your budget range if known."></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="website-url">Leave this field blank</label><input id="website-url" name="website" tabindex="-1" autocomplete="off"></div>
+        <button class="btn primary" type="submit">Send Inquiry <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="fine">All fields are required. We use your details only to respond to your inquiry. Please don't include passwords or other sensitive information.</p>
+        <p id="form-status" class="status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#home" aria-label="AlphaTechForge home">
+          <svg viewBox="0 0 40 46" fill="none" aria-hidden="true"><path d="M20 2 36 8v14c0 10-6 17-16 22C10 39 4 32 4 22V8L20 2Z" stroke="#D9B461" stroke-width="3"/><path d="m11 32 9-21 9 21M15 25h10" stroke="#F5F3EE" stroke-width="3.5" stroke-linecap="square"/><path d="M17 25h6" stroke="#F47A3B" stroke-width="3.5"/></svg>
+          <span>Alpha<b>Tech</b>Forge</span>
+        </a>
+        <p>Professional web, security, IT and data services for small businesses and professionals.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul><li><a href="#services">Services</a></li><li><a href="#approach">Approach</a></li><li><a href="#process">Process</a></li><li><a href="#about">About</a></li><li><a href="#faq">FAQ</a></li></ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul><li><a href="#contact">Request a quote</a></li><li><a class="js-email" href="mailto:sow.al@northeastern.edu?subject=Project%20inquiry%3A%20AlphaTechForge">Email us</a></li></ul>
+      </div>
+    </div>
+    <div class="legal"><span>© <span id="year">2026</span> AlphaTechForge. All rights reserved.</span><span>Web · Security · IT · Data</span></div>
+  </div>
+</footer>
+
+<button id="back-top" class="back-top" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+<script>
+(() => {
+  'use strict';
+  // Change the contact address here (and in functions/api/contact.js).
+  const EMAIL = 'sow.al@northeastern.edu';
+  const $ = s => document.querySelector(s);
+  const smooth = () => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+  // Email links
+  const mailto = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Project inquiry: AlphaTechForge');
+  const link = $('#email-link'); link.href = mailto; link.textContent = EMAIL;
+  document.querySelectorAll('.js-email').forEach(a => a.href = mailto);
+
+  // Mobile menu
+  const toggle = $('#menu-toggle'), nav = $('#navlinks'), icon = $('#menu-icon');
+  const OPEN = 'M4 7h16M4 12h16M4 17h16', CLOSE = 'M6 6l12 12M18 6 6 18';
+  function setMenu(open) {
+    nav.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+    icon.setAttribute('d', open ? CLOSE : OPEN);
+  }
+  toggle.addEventListener('click', () => setMenu(!nav.classList.contains('open')));
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  document.addEventListener('click', e => { if (!nav.contains(e.target) && !toggle.contains(e.target)) setMenu(false); });
+
+  // Service buttons pre-fill the form
+  document.querySelectorAll('.service-quote').forEach(btn => btn.addEventListener('click', () => {
+    $('#client-service').value = btn.dataset.service;
+    $('#contact').scrollIntoView({ behavior: smooth() });
+    setTimeout(() => $('#client-name').focus({ preventScroll: true }), 400);
+  }));
+
+  // Inquiry form
+  const form = $('#quote-form'), status = $('#form-status'), submit = form.querySelector('button[type=submit]');
+  const submitHTML = submit.innerHTML;
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    status.classList.remove('error');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    submit.disabled = true; submit.textContent = 'Sending…'; status.textContent = '';
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+      let data = {}; try { data = await res.json(); } catch {}
+      if (!res.ok) throw new Error(data.error || 'Your inquiry could not be sent.');
+      status.textContent = 'Thank you! Your inquiry has been received. We will reply by email shortly.';
+      form.reset();
+    } catch (err) {
+      status.classList.add('error');
+      status.textContent = (err.message || 'Unable to send.') + ' You can also email ' + EMAIL + ' directly.';
+    } finally {
+      submit.disabled = false; submit.innerHTML = submitHTML;
+    }
+  });
+
+  // Copy email
+  $('#copy-email').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(EMAIL); $('#copy-status').textContent = 'Copied to clipboard.'; }
+    catch { $('#copy-status').textContent = 'Copy failed. Please select the address above.'; }
+  });
+
+  // Back to top
+  const back = $('#back-top');
+  const onScroll = () => back.classList.toggle('visible', scrollY > 700);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  back.addEventListener('click', () => scrollTo({ top: 0, behavior: smooth() }));
+
+  $('#year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
