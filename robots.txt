@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alphatechforge.com/sitemap.xml
