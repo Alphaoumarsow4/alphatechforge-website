@@ -87,7 +87,7 @@ ${message}`;
       },
       body: JSON.stringify({
         from: env.CONTACT_FROM,
-        to: ["sow.al@northeastern.edu"],
+        to: ["alphatechforgestudio@gmail.com"],
         reply_to: email,
         subject: `AlphaTechForge inquiry: ${service}`,
         text: content
