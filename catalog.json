@@ -1,0 +1,52 @@
+{
+  "currency": "usd",
+  "termsVersion": "2026-11-17",
+  "packages": [
+    {
+      "id": "starter",
+      "name": "Starter",
+      "price": 499,
+      "blurb": "A single landing page to get you online fast.",
+      "features": ["1-page custom website", "Responsive on every device", "Contact form & social links", "Basic SEO setup"],
+      "schedule": [
+        { "label": "At booking", "percent": 100 }
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "price": 1299,
+      "featured": true,
+      "blurb": "A complete multi-page site for a growing business.",
+      "features": ["Up to 5 custom pages", "Everything in Starter", "Speed optimisation", "Hosting & domain setup help"],
+      "schedule": [
+        { "label": "At booking", "percent": 50 },
+        { "label": "Before launch", "percent": 50 }
+      ]
+    },
+    {
+      "id": "premium",
+      "name": "Premium",
+      "price": 2499,
+      "blurb": "For selling online or adding advanced features.",
+      "features": ["Up to 10 pages", "Everything in Business", "Small storefront & online payments", "Priority support"],
+      "schedule": [
+        { "label": "At booking", "percent": 40 },
+        { "label": "On design approval", "percent": 30 },
+        { "label": "Before launch", "percent": 30 }
+      ]
+    }
+  ],
+  "addons": [
+    { "id": "logo", "name": "Logo design", "price": 200, "note": "3 concepts, 2 revision rounds" },
+    { "id": "copy", "name": "Copywriting", "price": 250, "note": "Text for up to 5 pages" },
+    { "id": "page", "name": "Extra page or section", "price": 300, "note": "Beyond your package allowance" },
+    { "id": "booking", "name": "Online booking setup", "price": 250, "note": "Appointments or reservations" },
+    { "id": "rush", "name": "Rush delivery", "price": 300, "note": "Launch in about 2 weeks" }
+  ],
+  "carePlan": {
+    "name": "Care plan",
+    "price": 79,
+    "note": "Hosting help, security updates and up to 30 minutes of edits a month. Billed monthly from launch, cancel with 30 days' notice."
+  }
+}

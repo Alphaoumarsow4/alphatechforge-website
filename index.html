@@ -165,7 +165,52 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
 .back-top svg{width:18px;height:18px}
 .back-top.visible{opacity:1;pointer-events:auto;transform:none}
 
+/* Packages & checkout */
+[hidden]{display:none!important}
+.card-links{margin-top:auto;display:flex;flex-wrap:wrap;gap:4px 20px}
+.card-links .text-link{margin-top:0}
+.from{display:inline-block;margin:-6px 0 16px;font-size:13.5px;font-weight:600;color:var(--gold-2)}
+.pkgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:44px}
+.pkg{position:relative;display:flex;flex-direction:column;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+.pkg.featured{border-color:var(--gold);background:linear-gradient(180deg,#1b1d1d,var(--surface))}
+.pkg-badge{position:absolute;top:-12px;left:24px;background:var(--gold);color:#12141a;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+.pkg h3{margin:0}
+.pkg .for{color:var(--muted);font-size:15px;margin:4px 0 0}
+.amount{display:flex;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.amount strong{font-size:38px;letter-spacing:-.02em}
+.amount small{color:var(--muted);font-size:13px}
+.pkg ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;font-size:15px;color:#d3d6dc}
+.pkg li{display:grid;grid-template-columns:22px 1fr;gap:10px}
+.terms-line{font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin:0}
+.terms-line b{color:var(--text);font-weight:600}
+.pkg .btn{margin-top:auto;width:100%}
+.pkg-note{color:var(--muted);font-size:14.5px;margin:22px 0 0}
+.banner{margin-top:28px;padding:16px 18px;border-radius:12px;border:1px solid var(--gold);background:#17150f;color:var(--text);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.banner p{margin:0}
+.banner button{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;padding:0 4px}
+dialog{width:min(560px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line-2);border-radius:16px;background:var(--bg-alt);color:var(--text);overflow:auto}
+dialog::backdrop{background:#04060ad0;backdrop-filter:blur(3px)}
+.dlg-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.dlg-head h2{font-size:20px;margin:0}
+.x-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line-2);background:transparent;display:grid;place-items:center;font-size:20px;line-height:1}
+.dlg-body{padding:24px;display:grid;gap:18px}
+.group{display:grid;gap:8px;border:0;margin:0;padding:0}
+.group legend{font-size:13.5px;font-weight:600;color:#d8dbe0;padding:0;margin-bottom:8px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line-2);border-radius:10px;background:#0d1219;cursor:pointer;font-size:15px}
+.check input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--gold);flex:none}
+.check .nm{flex:1;min-width:0}
+.check small{display:block;color:var(--muted);font-size:13px}
+.check .pr{color:var(--gold-2);font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.check.plain{border:0;background:none;padding:0}
+.sched{display:grid;gap:8px;padding:16px;border:1px solid var(--line-2);border-radius:12px;background:var(--bg);font-size:15px;font-variant-numeric:tabular-nums}
+.sched div{display:flex;justify-content:space-between;gap:12px;color:var(--muted)}
+.sched .due{color:var(--text);font-weight:700;font-size:18px;padding-top:8px;border-top:1px solid var(--line)}
+.dlg-body .btn.primary{width:100%}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.secure{display:flex;gap:8px;font-size:13px;color:var(--muted);margin:0}
+
 @media(max-width:980px){
+  .pkgs{grid-template-columns:1fr;max-width:560px}
   .hero-grid,.about,.faq-grid,.contact{grid-template-columns:1fr}
   .hero-grid{gap:44px}.about,.faq-grid{gap:32px}
   .services{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -214,6 +259,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
     </button>
     <nav class="navlinks" id="navlinks" aria-label="Main navigation">
       <a href="#services">Services</a>
+      <a href="#packages">Packages</a>
       <a href="#approach">Approach</a>
       <a href="#process">Process</a>
       <a href="#about">About</a>
@@ -261,7 +307,11 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
         <h3>Web Design &amp; Development</h3>
         <p>Fast, responsive websites that present your business clearly and convert visitors into enquiries.</p>
         <ul><li>Business sites &amp; landing pages</li><li>Portfolios and small storefronts</li><li>Hand-coded, no page-builder lock-in</li></ul>
-        <button class="text-link service-quote" data-service="Web Design & Development" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <span class="from" id="web-from" hidden></span>
+        <div class="card-links">
+          <a class="text-link" href="#packages">See packages <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <button class="text-link service-quote" data-service="Web Design & Development" type="button">Request a quote <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
       </article>
       <article class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d9b461" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
@@ -301,6 +351,38 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
     </div>
   </div>
 </section>
+
+<section id="packages" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Website packages</span>
+      <h2>Fixed-price websites, booked online.</h2>
+      <p class="sub">Pick a package, add any extras and pay securely to book your project. Every package is hand-coded, fully responsive and yours once it's paid for. Need something different? <a class="email" href="#contact">Request a custom quote.</a></p>
+    </div>
+    <div class="banner" id="checkout-banner" role="status" hidden><p id="checkout-banner-text"></p><button type="button" id="banner-close" aria-label="Dismiss">&times;</button></div>
+    <div class="pkgs" id="pkgs"><p class="sub">Loading packages…</p></div>
+    <noscript><p class="sub">Packages need JavaScript to load. You can <a class="email" href="#contact">request a quote</a> instead.</p></noscript>
+    <p class="pkg-note">Prices in USD. Payments are processed securely by Stripe. By booking you agree to our <a class="email" href="/terms.html">Terms of Service</a>.</p>
+  </div>
+</section>
+
+<dialog id="book-dlg" aria-labelledby="book-title">
+  <div class="dlg-head"><h2 id="book-title">Book your website</h2><button class="x-btn" type="button" id="book-close" aria-label="Close">&times;</button></div>
+  <form class="dlg-body" id="book-form" novalidate>
+    <fieldset class="group" id="addon-list"><legend>Add-ons (optional)</legend></fieldset>
+    <label class="check"><input type="checkbox" id="care-plan"><span class="nm" id="care-text"></span><span class="pr" id="care-price"></span></label>
+    <div class="row">
+      <div class="field"><label for="book-name">Full name</label><input id="book-name" autocomplete="name" required maxlength="100"></div>
+      <div class="field"><label for="book-email">Email address</label><input id="book-email" type="email" autocomplete="email" required maxlength="150"></div>
+    </div>
+    <div class="field"><label for="book-notes">Anything we should know? <span style="font-weight:400;color:var(--muted)">(optional)</span></label><textarea id="book-notes" maxlength="450" style="min-height:90px" placeholder="Your business, websites you like, deadlines…"></textarea></div>
+    <div class="sched" id="sched"></div>
+    <label class="check plain"><input type="checkbox" id="agree" required><span class="nm">I have read and agree to the <a class="email" href="/terms.html" target="_blank" rel="noopener">Terms of Service</a>, including the payment schedule above.</span></label>
+    <p class="status error" id="book-status" role="alert"></p>
+    <button class="btn primary" type="submit" id="book-submit">Continue to secure payment</button>
+    <p class="secure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5BD48A" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>You'll pay on Stripe's secure page. Card details never touch this site.</p>
+  </form>
+</dialog>
 
 <section id="approach" class="alt">
   <div class="wrap">
@@ -375,7 +457,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
     </div>
     <div class="faq">
       <details><summary>What kinds of projects do you take on?</summary><p>Websites, cybersecurity documentation and reviews, IT support, presentations and business documents, Excel and data work, and custom projects that combine several of these.</p></details>
-      <details><summary>How much does a project cost?</summary><p>Pricing depends on scope, complexity and timeline. Share a short description through the inquiry form and you'll receive a written estimate before any work begins.</p></details>
+      <details><summary>How much does a project cost?</summary><p>Website packages have fixed prices listed in the <a class="email" href="#packages">Packages</a> section and can be booked online. Other services depend on scope, complexity and timeline: share a short description through the inquiry form and you'll receive a written estimate before any work begins.</p></details>
+      <details><summary>How do payments work?</summary><p>All payments are processed securely by Stripe; we never see or store your card details. Website packages are paid in stages shown on each package, starting with a booking payment. For quoted services, you'll receive an invoice with a secure payment link once you approve the estimate. Full details are in our <a class="email" href="/terms.html">Terms of Service</a>.</p></details>
       <details><summary>How long does a typical project take?</summary><p>Timelines vary with scope. Smaller tasks can often be turned around quickly, while larger builds are planned in stages. Your estimate will include a realistic timeline.</p></details>
       <details><summary>What technology do you build websites with?</summary><p>Most sites are hand-coded for speed, security and full ownership, with no page-builder subscription required. Where a platform is a better fit for your needs, we'll recommend it and explain why.</p></details>
       <details><summary>Do I own the finished work?</summary><p>Yes. Once the project is complete and paid for, the deliverables are yours, along with the files, access and notes you need to use them.</p></details>
@@ -443,11 +526,11 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
       </div>
       <div>
         <h4>Company</h4>
-        <ul><li><a href="#services">Services</a></li><li><a href="#approach">Approach</a></li><li><a href="#process">Process</a></li><li><a href="#about">About</a></li><li><a href="#faq">FAQ</a></li></ul>
+        <ul><li><a href="#services">Services</a></li><li><a href="#packages">Packages</a></li><li><a href="#approach">Approach</a></li><li><a href="#process">Process</a></li><li><a href="#about">About</a></li><li><a href="#faq">FAQ</a></li></ul>
       </div>
       <div>
         <h4>Contact</h4>
-        <ul><li><a href="#contact">Request a quote</a></li><li><a class="js-email" href="mailto:alphatechforgestudio@gmail.com?subject=Project%20inquiry%3A%20AlphaTechForge">Email us</a></li></ul>
+        <ul><li><a href="#contact">Request a quote</a></li><li><a class="js-email" href="mailto:alphatechforgestudio@gmail.com?subject=Project%20inquiry%3A%20AlphaTechForge">Email us</a></li><li><a href="/terms.html">Terms of Service</a></li><li><a href="/privacy.html">Privacy Policy</a></li></ul>
       </div>
     </div>
     <div class="legal"><span>© <span id="year">2026</span> AlphaTechForge. All rights reserved.</span><span>Web · Security · IT · Data</span></div>
@@ -525,6 +608,95 @@ footer{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--muted);f
   back.addEventListener('click', () => scrollTo({ top: 0, behavior: smooth() }));
 
   $('#year').textContent = new Date().getFullYear();
+
+  // ===== Website packages & booking (prices come from /catalog.json) =====
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = cents => '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: cents % 100 ? 2 : 0, maximumFractionDigits: 2 });
+  const tickIcon = '<span class="tick"><svg aria-hidden="true"><use href="#i-check"/></svg></span>';
+  let catalog = null, chosen = null;
+
+  // Same rule as functions/api/checkout.js: whole-dollar instalments, last one absorbs rounding.
+  function plan(pkg, addonIds) {
+    const total = Math.round(pkg.price * 100) + addonIds.reduce((s, id) => s + Math.round(catalog.addons.find(a => a.id === id).price * 100), 0);
+    let used = 0;
+    return { total, parts: pkg.schedule.map((s, i) => {
+      const amt = i === pkg.schedule.length - 1 ? total - used : Math.round(total * s.percent / 10000) * 100;
+      used += amt; return { ...s, amt };
+    }) };
+  }
+  const termsText = pkg => pkg.schedule.length === 1 ? '<b>Paid in full</b> at booking'
+    : pkg.schedule.map((s, i) => (i ? '' : '<b>') + s.percent + '% ' + s.label.toLowerCase() + (i ? '' : '</b>')).join(' · ');
+
+  function renderPackages() {
+    $('#pkgs').innerHTML = catalog.packages.map(p => `
+      <article class="pkg${p.featured ? ' featured' : ''}">
+        ${p.featured ? '<span class="pkg-badge">Most popular</span>' : ''}
+        <div><h3>${esc(p.name)}</h3><p class="for">${esc(p.blurb)}</p></div>
+        <div class="amount"><strong>${money(p.price * 100)}</strong><small>one-time</small></div>
+        <ul>${p.features.map(f => `<li>${tickIcon}<span>${esc(f)}</span></li>`).join('')}</ul>
+        <p class="terms-line">${termsText(p)}</p>
+        <button class="btn${p.featured ? ' primary' : ''}" type="button" data-book="${esc(p.id)}">Book ${esc(p.name)}</button>
+      </article>`).join('');
+    const from = Math.min(...catalog.packages.map(p => p.price));
+    $('#web-from').textContent = 'Packages from ' + money(from * 100); $('#web-from').hidden = false;
+    $('#addon-list').innerHTML = '<legend>Add-ons (optional)</legend>' + catalog.addons.map(a => `
+      <label class="check"><input type="checkbox" name="addon" value="${esc(a.id)}"><span class="nm">${esc(a.name)}<small>${esc(a.note)}</small></span><span class="pr">+${money(a.price * 100)}</span></label>`).join('');
+    $('#care-text').innerHTML = `Add the ${esc(catalog.carePlan.name)} after launch<small>${esc(catalog.carePlan.note)} Not charged today.</small>`;
+    $('#care-price').textContent = money(catalog.carePlan.price * 100) + '/mo';
+  }
+  function renderSchedule() {
+    const ids = [...document.querySelectorAll('#addon-list input:checked')].map(i => i.value);
+    const { total, parts } = plan(chosen, ids);
+    $('#sched').innerHTML = `<div><span>Project total</span><span>${money(total)}</span></div>` +
+      parts.slice(1).map(p => `<div><span>${esc(p.label)} (${p.percent}%)</span><span>${money(p.amt)}</span></div>`).join('') +
+      ($('#care-plan').checked ? `<div><span>${esc(catalog.carePlan.name)}, from launch</span><span>${money(catalog.carePlan.price * 100)}/mo</span></div>` : '') +
+      `<div class="due"><span>Due today${parts.length > 1 ? ' (' + parts[0].percent + '%)' : ''}</span><span>${money(parts[0].amt)}</span></div>`;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-book]'); if (!b || !catalog) return;
+    chosen = catalog.packages.find(p => p.id === b.dataset.book);
+    $('#book-title').textContent = 'Book the ' + chosen.name + ' package';
+    $('#book-status').textContent = '';
+    renderSchedule(); $('#book-dlg').showModal();
+  });
+  $('#book-form').addEventListener('change', renderSchedule);
+  $('#book-close').addEventListener('click', () => $('#book-dlg').close());
+  $('#book-dlg').addEventListener('click', e => { if (e.target === $('#book-dlg')) $('#book-dlg').close(); });
+  $('#book-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const st = $('#book-status'), btn = $('#book-submit'), name = $('#book-name').value.trim(), email = $('#book-email').value.trim();
+    st.textContent = '';
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { st.textContent = 'Please enter your name and a valid email address.'; return; }
+    if (!$('#agree').checked) { st.textContent = 'Please accept the Terms of Service to continue.'; $('#agree').focus(); return; }
+    btn.disabled = true; btn.textContent = 'Opening secure checkout…';
+    try {
+      const res = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        package: chosen.id, addons: [...document.querySelectorAll('#addon-list input:checked')].map(i => i.value),
+        carePlan: $('#care-plan').checked, name, email, notes: $('#book-notes').value.trim(),
+        agreeToTerms: true, termsVersion: catalog.termsVersion }) });
+      let data = {}; try { data = await res.json(); } catch {}
+      if (!res.ok || !data.url) throw new Error(data.error || 'We could not start the payment.');
+      location.href = data.url;
+    } catch (err) {
+      st.textContent = (err.message || 'Something went wrong.') + ' You can also email ' + EMAIL + '.';
+      btn.disabled = false; btn.textContent = 'Continue to secure payment';
+    }
+  });
+
+  // Message after returning from Stripe
+  const result = new URLSearchParams(location.search).get('checkout');
+  if (result === 'success' || result === 'cancelled') {
+    $('#checkout-banner-text').textContent = result === 'success'
+      ? "Payment received. Thank you! You'll get a receipt by email, and we'll be in touch within one business day to schedule your kickoff."
+      : 'Checkout was cancelled and you have not been charged. You can book again whenever you are ready.';
+    $('#checkout-banner').hidden = false;
+    history.replaceState(null, '', location.pathname + location.hash);
+  }
+  $('#banner-close').addEventListener('click', () => $('#checkout-banner').hidden = true);
+
+  fetch('/catalog.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+    .then(c => { catalog = c; renderPackages(); if (location.hash === '#packages') $('#packages').scrollIntoView(); })
+    .catch(() => { $('#pkgs').innerHTML = '<p class="sub">Packages could not be loaded right now. Please <a class="email" href="#contact">request a quote</a> instead.</p>'; });
 })();
 </script>
 </body>
