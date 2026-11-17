@@ -72,7 +72,7 @@ recalculated on the server; the browser cannot change them.
 
 Edit `terms.html`, then set `termsVersion` in `catalog.json` to the new date. Each payment records the
 version the client accepted (`terms_version` and `terms_accepted_at` in the Stripe payment metadata).
-Fill in the governing-law state in section 15 before launch, and have the terms reviewed.
+Have the terms reviewed before relying on them.
 
 ### Collecting later instalments and other services
 
