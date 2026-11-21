@@ -264,6 +264,7 @@ dialog::backdrop{background:#04060ad0;backdrop-filter:blur(3px)}
       <a href="#process">Process</a>
       <a href="#about">About</a>
       <a href="#faq">FAQ</a>
+      <a href="/portal/">Client login</a>
       <a class="btn primary small" href="#contact">Request a Quote</a>
     </nav>
   </div>
@@ -633,7 +634,7 @@ dialog::backdrop{background:#04060ad0;backdrop-filter:blur(3px)}
         ${p.featured ? '<span class="pkg-badge">Most popular</span>' : ''}
         <div><h3>${esc(p.name)}</h3><p class="for">${esc(p.blurb)}</p></div>
         <div class="amount"><strong>${money(p.price * 100)}</strong><small>one-time</small></div>
-        <ul>${p.features.map(f => `<li>${tickIcon}<span>${esc(f)}</span></li>`).join('')}</ul>
+        <ul>${p.features.map(f => `<li>${tickIcon}<span>${esc(f)}</span></li>`).join('')}${p.durationHours ? `<li>${tickIcon}<span><b>Delivered within ${p.durationHours} hours</b></span></li>` : ''}</ul>
         <p class="terms-line">${termsText(p)}</p>
         <button class="btn${p.featured ? ' primary' : ''}" type="button" data-book="${esc(p.id)}">Book ${esc(p.name)}</button>
       </article>`).join('');
@@ -687,7 +688,7 @@ dialog::backdrop{background:#04060ad0;backdrop-filter:blur(3px)}
   const result = new URLSearchParams(location.search).get('checkout');
   if (result === 'success' || result === 'cancelled') {
     $('#checkout-banner-text').textContent = result === 'success'
-      ? "Payment received. Thank you! You'll get a receipt by email, and we'll be in touch within one business day to schedule your kickoff."
+      ? "Payment received. Thank you! Your project and delivery countdown are now in your client portal (Client login, top menu). You'll also get a receipt and a welcome email."
       : 'Checkout was cancelled and you have not been charged. You can book again whenever you are ready.';
     $('#checkout-banner').hidden = false;
     history.replaceState(null, '', location.pathname + location.hash);

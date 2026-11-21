@@ -14,6 +14,10 @@ contact form handler at `functions/api/contact.js`.
 | `terms.html`, `privacy.html` | Terms of Service and Privacy Policy |
 | `functions/api/contact.js` | Cloudflare Pages Function that receives the inquiry form and emails it via Resend |
 | `functions/api/checkout.js` | Cloudflare Pages Function that creates a Stripe Checkout payment for a website package |
+| `portal/` | Client portal (`/portal/`) and admin dashboard (`/portal/admin.html`) |
+| `functions/api/auth`, `projects`, `files`, `admin`, `me.js` | Client portal API: email-link sign-in, projects, payments, files, messages |
+| `functions/api/stripe-webhook.js` | Receives Stripe payment confirmations: creates projects from bookings and marks portal payments as paid |
+| `functions/_lib/` | Shared code for the portal API (not exposed as web routes) |
 | `_headers` | Security headers applied by Cloudflare Pages |
 | `favicon.svg`, `robots.txt`, `sitemap.xml` | Static assets |
 
@@ -82,3 +86,34 @@ Have the terms reviewed before relying on them.
   written estimate, send a Stripe invoice the same way (in full under $300, otherwise a 50% deposit).
 - **Care plan**: if the payment's `care_plan` metadata says "requested", create a monthly subscription
   for the client in Stripe → Subscriptions starting on the launch date.
+
+## Client portal
+
+Clients sign in at `/portal/` with a one-time link sent to their email (no passwords). They see each
+project's stage, a live countdown to the delivery time, their estimate and payments, files and messages.
+The admin dashboard at `/portal/admin.html` lists all active projects sorted by deadline, with overdue
+and due-soon projects highlighted, and is where projects, estimates, payment requests and updates are managed.
+
+- **Website bookings** made on the homepage become portal projects automatically (via the Stripe webhook),
+  with the countdown started from the package's `durationHours` in `catalog.json`.
+- **Other services**: create an estimate in the admin dashboard. The client approves it by paying the first
+  payment in their portal, which starts the countdown. Default delivery time is 36 hours (editable per project).
+- Updates, new files, messages and payment requests can email the client automatically.
+
+### Setup (one time)
+
+1. **Database:** Cloudflare → Storage & Databases → D1 → **Create database** (e.g. `alphatechforge-portal`).
+   Then Workers & Pages → your project → Settings → **Bindings** → Add → **D1 database**:
+   variable name `DB`, select the database. Tables are created automatically on first use.
+2. **File storage:** Cloudflare → **R2** → create a bucket (e.g. `alphatechforge-files`). Then Settings →
+   Bindings → Add → **R2 bucket**: variable name `FILES`, select the bucket.
+3. **Admin access:** Settings → Variables and Secrets → add `ADMIN_EMAILS` (Text) with the email address(es)
+   allowed into the admin dashboard, comma-separated.
+4. **Stripe webhook:** Stripe → Developers → **Webhooks** → Add endpoint
+   `https://alphatechforge.com/api/stripe-webhook`, events `checkout.session.completed` and
+   `checkout.session.async_payment_succeeded`. Copy the **signing secret** (`whsec_…`) and add it in
+   Cloudflare as `STRIPE_WEBHOOK_SECRET` (**Secret**).
+5. Sign-in emails use the same `RESEND_API_KEY` and `CONTACT_FROM` as the contact form.
+6. **Redeploy**, then sign in at `/portal/` with your admin email and open `/portal/admin.html`.
+
+If `DB` is missing the portal shows "The client portal isn't set up yet", and the rest of the site keeps working.

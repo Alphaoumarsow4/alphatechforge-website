@@ -6,6 +6,7 @@
       "id": "starter",
       "name": "Starter",
       "price": 499,
+      "durationHours": 36,
       "blurb": "A single landing page to get you online fast.",
       "features": ["1-page custom website", "Responsive on every device", "Contact form & social links", "Basic SEO setup"],
       "schedule": [
@@ -16,6 +17,7 @@
       "id": "business",
       "name": "Business",
       "price": 1299,
+      "durationHours": 36,
       "featured": true,
       "blurb": "A complete multi-page site for a growing business.",
       "features": ["Up to 5 custom pages", "Everything in Starter", "Speed optimisation", "Hosting & domain setup help"],
@@ -28,6 +30,7 @@
       "id": "premium",
       "name": "Premium",
       "price": 2499,
+      "durationHours": 12,
       "blurb": "For selling online or adding advanced features.",
       "features": ["Up to 10 pages", "Everything in Business", "Small storefront & online payments", "Priority support"],
       "schedule": [

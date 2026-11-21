@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0e14">
+<meta name="robots" content="noindex">
+<title>Client Portal | AlphaTechForge</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/portal/portal.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><svg viewBox="0 0 40 46" fill="none" aria-hidden="true"><path d="M20 2 36 8v14c0 10-6 17-16 22C10 39 4 32 4 22V8L20 2Z" stroke="#D9B461" stroke-width="3"/><path d="m11 32 9-21 9 21M15 25h10" stroke="#F5F3EE" stroke-width="3.5" stroke-linecap="square"/><path d="M17 25h6" stroke="#F47A3B" stroke-width="3.5"/></svg><span>Alpha<b>Tech</b>Forge</span><small>Client portal</small></a>
+  <div class="who" id="who" hidden><span id="who-email"></span><a class="btn small" id="admin-link" href="/portal/admin.html" hidden>Admin</a><button class="btn small" type="button" id="sign-out">Sign out</button></div>
+</div></header>
+
+<main class="wrap">
+  <!-- Sign in -->
+  <section class="login" id="login" hidden>
+    <span class="eyebrow">Client portal</span>
+    <h1>Sign in</h1>
+    <p class="muted">Enter the email you used with AlphaTechForge and we'll send you a one-time sign-in link. No password needed.</p>
+    <form id="login-form" class="field" novalidate>
+      <label for="login-email">Email address</label>
+      <input id="login-email" type="email" autocomplete="email" required maxlength="150" placeholder="you@company.com">
+      <button class="btn primary" type="submit" style="margin-top:8px">Email me a sign-in link</button>
+    </form>
+    <p class="notice ok" id="login-sent" hidden></p>
+    <p class="error" id="login-error" role="alert" hidden></p>
+    <p class="muted small">New client? <a href="/#packages">Book a website</a> or <a href="/#contact">request a quote</a>. Your portal is created automatically.</p>
+  </section>
+
+  <!-- Finish sign-in from the email link -->
+  <section class="login" id="verify" hidden>
+    <span class="eyebrow">Client portal</span>
+    <h1>Finish signing in</h1>
+    <p class="muted">Click below to sign in to your AlphaTechForge portal on this device.</p>
+    <button class="btn primary" type="button" id="verify-btn">Sign in</button>
+    <p class="error" id="verify-error" role="alert" hidden></p>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dash" hidden>
+    <span class="eyebrow">Client portal</span>
+    <h1 id="hello">Your projects</h1>
+    <p class="notice ok" id="paid-note" hidden>Payment received. Thank you! It can take a few seconds to appear below.</p>
+    <div class="stats" id="stats"></div>
+    <div class="tabs" role="tablist" id="tabs">
+      <button type="button" role="tab" data-tab="active" aria-selected="true">Active<span class="count" id="c-active">0</span></button>
+      <button type="button" role="tab" data-tab="done" aria-selected="false">Completed<span class="count" id="c-done">0</span></button>
+    </div>
+    <div class="projects" id="projects"></div>
+  </section>
+</main>
+
+<script src="/portal/common.js"></script>
+<script>
+(() => {
+  let termsVersion = "", projects = [], tab = "active", me = null;
+  fetch("/catalog.json").then(r => r.json()).then(c => termsVersion = c.termsVersion).catch(() => {});
+  const qs = new URLSearchParams(location.search);
+
+  // ---------- Sign-in ----------
+  $("#login-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = $("#login-email").value.trim(), err = $("#login-error"), btn = e.target.querySelector("button");
+    err.hidden = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = "Please enter a valid email address."; err.hidden = false; return; }
+    btn.disabled = true;
+    try {
+      const r = await api("/api/auth/request", { method: "POST", body: { email } });
+      $("#login-sent").textContent = r.message + " Check your inbox (and spam folder).";
+      $("#login-sent").hidden = false;
+    } catch (x) { err.textContent = x.message; err.hidden = false; }
+    finally { btn.disabled = false; }
+  });
+
+  $("#verify-btn").addEventListener("click", async () => {
+    const err = $("#verify-error"), btn = $("#verify-btn");
+    btn.disabled = true; err.hidden = true;
+    try {
+      await api("/api/auth/verify", { method: "POST", body: { token: qs.get("login") } });
+      history.replaceState(null, "", "/portal/");
+      start();
+    } catch (x) { err.innerHTML = esc(x.message) + ' <a href="/portal/">Request a new link</a>'; err.hidden = false; btn.disabled = false; }
+  });
+  $("#sign-out").addEventListener("click", signOut);
+
+  // ---------- Dashboard ----------
+  function projectHtml(p) {
+    const due = p.payments.filter(x => x.status === "due");
+    const paid = p.payments.filter(x => x.status === "paid").reduce((s, x) => s + x.amountCents, 0);
+    const estimate = p.status === "estimate";
+    const termsBox = `<label class="check"><input type="checkbox" data-agree required><span>I agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms of Service</a>.</span></label>`;
+
+    const approve = estimate && due.length ? `<div class="approve">
+        <h3 style="margin:0">Your estimate</h3>${itemsHtml(p)}
+        <div class="lines">${p.payments.map((x, i) => `<div><span class="muted">${esc(x.label)}${i === 0 ? " (due now)" : ""}</span><span class="amt">${money(x.amountCents)}</span></div>`).join("")}</div>
+        ${termsBox}
+        <div><button class="btn primary" type="button" data-pay="${p.id}" data-payment="${due[0].id}">Approve &amp; pay ${money(due[0].amountCents)}</button></div>
+        <p class="muted small" style="margin:0">Your ${p.durationHours || 36}-hour delivery countdown starts as soon as this payment goes through. Questions? Send us a message below first.</p>
+      </div>` : "";
+
+    const payments = !estimate && p.payments.length ? `<details class="sec" data-key="${p.id}-pay"${due.length ? " open" : ""}><summary>Payments ${due.length ? `<span class="pill warn">${due.length} due</span>` : `<span class="pill ok">Up to date</span>`}</summary>
+      <div class="inner">${itemsHtml(p)}
+        ${p.payments.map(x => `<div class="pay-row"><span class="l"><b>${esc(x.label)} · ${money(x.amountCents)}</b><small>${x.status === "paid" ? "Paid " + fmtDay(x.paidAt) : "Due"}</small></span>
+          ${x.status === "paid" ? '<span class="pill ok">Paid</span>' : `<button class="btn small primary" type="button" data-pay="${p.id}" data-payment="${x.id}">Pay ${money(x.amountCents)}</button>`}</div>`).join("")}
+        ${due.length ? termsBox : ""}
+        <p class="muted small" style="margin:0">Paid so far: ${money(paid)}</p></div></details>` : "";
+
+    return `<article class="project" id="${esc(p.id)}">
+      <div class="p-head"><div><h2>${esc(p.title)}</h2><div class="meta">${esc(p.service)} · started ${fmtDay(p.startAt || p.createdAt)}</div></div>${statusPill(p)}</div>
+      ${stepperHtml(p)}${timerHtml(p)}
+      <div class="p-body">
+        ${approve ? `<div style="margin-top:16px">${approve}</div>` : ""}
+        ${payments}
+        <details class="sec" data-key="${p.id}-files"><summary>Files <span class="muted small">${p.files.length}</span></summary><div class="inner">${filesHtml(p)}</div></details>
+        <details class="sec" data-key="${p.id}-msg"><summary>Messages <span class="muted small">${p.messages.length}</span></summary><div class="inner">${threadHtml(p, "client")}</div></details>
+        <details class="sec" data-key="${p.id}-upd"><summary>Updates</summary><div class="inner">${eventsHtml(p)}</div></details>
+      </div></article>`;
+  }
+
+  function render() {
+    const open = rememberOpen($("#projects"));
+    const active = projects.filter(p => p.status !== "done");
+    const done = projects.filter(p => p.status === "done");
+    $("#c-active").textContent = active.length; $("#c-done").textContent = done.length;
+    const list = tab === "active" ? active : done;
+    $("#projects").innerHTML = list.length ? list.map(projectHtml).join("")
+      : `<div class="empty">${tab === "active" ? 'No active projects. <a href="/#packages">Book a website</a> or <a href="/#contact">request a quote</a>.' : "No completed projects yet."}</div>`;
+    restoreOpen($("#projects"), open);
+
+    const running = projects.filter(p => isActive(p) && p.dueAt).sort((a, b) => a.dueAt - b.dueAt);
+    const dueCents = projects.flatMap(p => p.payments).filter(x => x.status === "due").reduce((s, x) => s + x.amountCents, 0);
+    $("#stats").innerHTML = `
+      <div class="stat"><b>${projects.filter(isActive).length}</b><span>Active projects</span></div>
+      <div class="stat"><b>${running.length ? fmtDate(running[0].dueAt).replace(/^\w+, /, "") : "—"}</b><span>Next delivery${running.length ? ": " + esc(running[0].title) : ""}</span></div>
+      <div class="stat${dueCents ? " soon" : ""}"><b>${money(dueCents)}</b><span>Remaining balance</span></div>
+      <div class="stat"><b>${projects.filter(p => p.status === "estimate").length}</b><span>Estimates to review</span></div>`;
+    tickClocks();
+  }
+
+  async function load() {
+    const r = await api("/api/projects");
+    clockOffset = r.serverTime - Date.now();
+    projects = r.projects;
+    render();
+  }
+
+  $("#tabs").addEventListener("click", e => {
+    const b = e.target.closest("[data-tab]"); if (!b) return;
+    tab = b.dataset.tab;
+    $$("#tabs [data-tab]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+    render();
+  });
+
+  $("#projects").addEventListener("click", async e => {
+    const b = e.target.closest("[data-pay]"); if (!b) return;
+    const card = b.closest(".project");
+    const agree = $("[data-agree]", b.closest(".approve, .inner") || card);
+    if (agree && !agree.checked) { toast("Please accept the Terms of Service first.", true); agree.focus(); return; }
+    b.disabled = true; b.textContent = "Opening secure checkout…";
+    try {
+      const r = await api(`/api/projects/${encodeURIComponent(b.dataset.pay)}/pay`, { method: "POST", body: { paymentId: b.dataset.payment, agreeToTerms: true, termsVersion } });
+      location.href = r.url;
+    } catch (x) { toast(x.message, true); b.disabled = false; load(); }
+  });
+  bindSharedForms($("#projects"), load);
+
+  async function start() {
+    $("#login").hidden = $("#verify").hidden = true;
+    try {
+      me = await api("/api/me");
+    } catch (x) {
+      if (x.status === 401) { $("#login").hidden = false; return; }
+      $("#login").hidden = false; $("#login-error").textContent = x.message; $("#login-error").hidden = false; return;
+    }
+    $("#who").hidden = false; $("#who-email").textContent = me.email; $("#admin-link").hidden = !me.isAdmin;
+    $("#hello").textContent = me.name ? `Welcome, ${me.name.split(" ")[0]}` : "Your projects";
+    $("#dash").hidden = false;
+    if (qs.get("paid")) { $("#paid-note").hidden = false; history.replaceState(null, "", "/portal/" + location.hash); }
+    await load().catch(x => toast(x.message, true));
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    if ($("#paid-note").hidden === false) setTimeout(() => load().catch(() => {}), 4000);
+    setInterval(() => { if (!document.hidden && !isBusy($("#projects"))) load().catch(() => {}); }, 60000);
+  }
+
+  if (qs.get("login")) $("#verify").hidden = false;
+  else start();
+})();
+</script>
+</body>
+</html>

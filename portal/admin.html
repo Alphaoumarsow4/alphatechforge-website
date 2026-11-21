@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0e14">
+<meta name="robots" content="noindex">
+<title>Admin | AlphaTechForge</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/portal/portal.css">
+<style>
+.toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.controls{display:grid;gap:12px;margin:16px 0 4px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg-alt)}
+.controls .row{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.items-edit{display:grid;gap:8px}
+.items-edit .it{display:grid;grid-template-columns:1fr 130px 38px;gap:8px}
+.client-line{font-size:13.5px;color:var(--muted);margin-top:2px}
+.client-line a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><svg viewBox="0 0 40 46" fill="none" aria-hidden="true"><path d="M20 2 36 8v14c0 10-6 17-16 22C10 39 4 32 4 22V8L20 2Z" stroke="#D9B461" stroke-width="3"/><path d="m11 32 9-21 9 21M15 25h10" stroke="#F5F3EE" stroke-width="3.5" stroke-linecap="square"/><path d="M17 25h6" stroke="#F47A3B" stroke-width="3.5"/></svg><span>Alpha<b>Tech</b>Forge</span><small>Admin</small></a>
+  <div class="who" id="who" hidden><span id="who-email"></span><button class="btn small" type="button" id="sign-out">Sign out</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="login" id="denied" hidden>
+    <span class="eyebrow">Admin</span><h1>Admins only</h1>
+    <p class="muted" id="denied-msg">Please sign in with your admin email.</p>
+    <a class="btn primary" href="/portal/">Go to sign in</a>
+  </section>
+
+  <section id="dash" hidden>
+    <div class="toolbar">
+      <div><span class="eyebrow">Admin dashboard</span><h1>Projects</h1></div>
+      <button class="btn primary" type="button" id="new-btn">+ New project or estimate</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="tabs" role="tablist" id="tabs">
+      <button type="button" role="tab" data-tab="active" aria-selected="true">Active<span class="count" id="c-active">0</span></button>
+      <button type="button" role="tab" data-tab="estimate" aria-selected="false">Estimates<span class="count" id="c-estimate">0</span></button>
+      <button type="button" role="tab" data-tab="done" aria-selected="false">Completed<span class="count" id="c-done">0</span></button>
+      <button type="button" role="tab" data-tab="cancelled" aria-selected="false">Cancelled<span class="count" id="c-cancelled">0</span></button>
+    </div>
+    <div class="projects" id="projects"></div>
+  </section>
+</main>
+
+<dialog id="new-dlg" aria-labelledby="new-title">
+  <div class="d-head"><h2 id="new-title">New project or estimate</h2><button class="x" type="button" data-close aria-label="Close">&times;</button></div>
+  <form class="d-body" id="new-form" novalidate>
+    <div class="row">
+      <div class="field"><label for="n-email">Client email</label><input id="n-email" type="email" required maxlength="150"></div>
+      <div class="field"><label for="n-name">Client name</label><input id="n-name" maxlength="100"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="n-title">Project title</label><input id="n-title" required maxlength="120" placeholder="e.g. Monthly sales dashboard"></div>
+      <div class="field"><label for="n-service">Service</label>
+        <select id="n-service">
+          <option>Web Design &amp; Development</option><option>Cybersecurity Solutions</option><option>IT Support &amp; Troubleshooting</option>
+          <option>Presentations &amp; Documents</option><option selected>Excel &amp; Data Solutions</option><option value="Tailored Digital Project">Custom Project</option>
+        </select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="n-type">Type</label>
+        <select id="n-type"><option value="estimate">Estimate (client approves &amp; pays, then the timer starts)</option><option value="booked">Booked project (timer starts now)</option></select></div>
+      <div class="field"><label for="n-hours">Delivery time (hours)</label><input id="n-hours" type="number" min="1" max="8760" value="36">
+        <div class="quick"><button class="btn small" type="button" data-h="12">12h</button><button class="btn small" type="button" data-h="24">24h</button><button class="btn small" type="button" data-h="36">36h</button><button class="btn small" type="button" data-h="48">48h</button><button class="btn small" type="button" data-h="72">72h</button></div></div>
+    </div>
+    <div class="field"><span class="label">Line items (USD)</span>
+      <div class="items-edit" id="n-items"></div>
+      <div><button class="btn small" type="button" id="add-item">+ Add item</button> <span class="muted small" id="n-total"></span></div></div>
+    <div class="field"><label for="n-schedule">Payment schedule</label>
+      <select id="n-schedule"><option value="100">100% upfront</option><option value="50">50% to start, 50% on delivery</option><option value="40">40% to start, 30% midway, 30% on delivery</option></select></div>
+    <div class="field"><label for="n-notes">Private notes (only you see these)</label><textarea id="n-notes" maxlength="2000"></textarea></div>
+    <label class="check"><input type="checkbox" id="n-notify" checked> Email the client a link to their portal</label>
+    <p class="error" id="n-error" role="alert" hidden></p>
+    <div><button class="btn primary" type="submit">Create</button></div>
+  </form>
+</dialog>
+
+<script src="/portal/common.js"></script>
+<script>
+(() => {
+  let projects = [], tab = "active";
+  const SCHEDULES = {
+    100: [{ label: "Payment in full", percent: 100 }],
+    50: [{ label: "Deposit (50%)", percent: 50 }, { label: "On delivery (50%)", percent: 50 }],
+    40: [{ label: "Deposit (40%)", percent: 40 }, { label: "Midway (30%)", percent: 30 }, { label: "On delivery (30%)", percent: 30 }]
+  };
+  const toLocalInput = ms => { const d = new Date(ms); return new Date(ms - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
+
+  // ---------- Project cards ----------
+  function card(p) {
+    const due = p.payments.filter(x => x.status === "due").reduce((s, x) => s + x.amountCents, 0);
+    const paid = p.payments.filter(x => x.status === "paid").reduce((s, x) => s + x.amountCents, 0);
+    const statuses = p.stages.map(s => s.key).concat("cancelled");
+    const labelFor = k => k === "cancelled" ? "Cancelled" : p.stages.find(s => s.key === k).label;
+    return `<article class="project" id="${esc(p.id)}">
+      <div class="p-head"><div><h2>${esc(p.title)}</h2>
+        <div class="client-line">${esc(p.clientName || "Client")} · <a href="mailto:${esc(p.clientEmail)}">${esc(p.clientEmail)}</a> · ${esc(p.service)}</div></div>
+        <div style="display:flex;gap:8px;align-items:center">${due ? `<span class="pill warn">${money(due)} due</span>` : ""}${statusPill(p)}</div></div>
+      ${stepperHtml(p)}${timerHtml(p, { admin: true })}
+      <div class="p-body">
+        <form class="controls" data-update="${p.id}">
+          <div class="row">
+            <div class="field"><label>Status</label><select name="status">${statuses.map(k => `<option value="${k}"${k === p.status ? " selected" : ""}>${labelFor(k)}</option>`).join("")}</select></div>
+            <div class="field"><label>Delivery due</label><input type="datetime-local" name="due" value="${p.dueAt ? toLocalInput(p.dueAt) : ""}">
+              <div class="quick"><button class="btn small" type="button" data-extend="12">+12h</button><button class="btn small" type="button" data-extend="24">+24h</button><button class="btn small" type="button" data-extend="48">+48h</button></div></div>
+          </div>
+          <div class="field"><label>Update for the client (optional)</label><textarea name="update" maxlength="1000" placeholder="e.g. Homepage design is ready for your review."></textarea></div>
+          <label class="check"><input type="checkbox" name="notify" checked> Email the client about this update</label>
+          <div><button class="btn primary small" type="submit">Save changes</button></div>
+        </form>
+
+        <details class="sec" data-key="${p.id}-pay"><summary>Items &amp; payments <span class="muted small">${money(paid)} paid${due ? ` · ${money(due)} due` : ""}</span></summary><div class="inner">
+          ${itemsHtml(p)}
+          ${p.payments.map(x => `<div class="pay-row"><span class="l"><b>${esc(x.label)} · ${money(x.amountCents)}</b><small>${x.status === "paid" ? "Paid " + fmtDay(x.paidAt) : "Due"}</small></span>
+            <span style="display:flex;gap:6px">${x.status === "paid"
+              ? `<button class="btn small" type="button" data-payment-status="${x.id}" data-to="due">Mark unpaid</button>`
+              : `<button class="btn small" type="button" data-payment-status="${x.id}" data-to="paid">Mark paid</button><button class="btn small danger" type="button" data-del-payment="${x.id}">Remove</button>`}</span></div>`).join("") || '<p class="muted small">No payments.</p>'}
+          <form data-add-payment="${p.id}" class="row" style="align-items:end">
+            <div class="field"><label>Request a payment</label><input name="label" maxlength="60" placeholder="e.g. Final payment" required></div>
+            <div class="field"><label>Amount (USD)</label><input name="amount" type="number" min="0.5" step="0.01" required></div>
+            <div><button class="btn small" type="submit">Request payment</button></div>
+          </form></div></details>
+
+        <details class="sec" data-key="${p.id}-files"><summary>Files <span class="muted small">${p.files.length}</span></summary><div class="inner">${filesHtml(p, { canDelete: true })}</div></details>
+        <details class="sec" data-key="${p.id}-msg"><summary>Messages <span class="muted small">${p.messages.length}${p.messages.length && p.messages[p.messages.length - 1].sender === "client" ? ' · <span style="color:var(--warn)">awaiting reply</span>' : ""}</span></summary><div class="inner">${threadHtml(p, "admin")}</div></details>
+        <details class="sec" data-key="${p.id}-notes"><summary>Private notes</summary><div class="inner">
+          <form data-notes="${p.id}" class="composer"><textarea class="input" name="notes" maxlength="2000">${esc(p.notes)}</textarea><div><button class="btn small" type="submit">Save notes</button></div></form></div></details>
+        <details class="sec" data-key="${p.id}-upd"><summary>Timeline</summary><div class="inner">${eventsHtml(p)}</div></details>
+      </div></article>`;
+  }
+
+  function render() {
+    const open = rememberOpen($("#projects"));
+    const groups = {
+      active: projects.filter(isActive).sort((a, b) => (a.dueAt || Infinity) - (b.dueAt || Infinity)),
+      estimate: projects.filter(p => p.status === "estimate"),
+      done: projects.filter(p => p.status === "done").sort((a, b) => b.updatedAt - a.updatedAt),
+      cancelled: projects.filter(p => p.status === "cancelled")
+    };
+    Object.entries(groups).forEach(([k, v]) => $("#c-" + k).textContent = v.length);
+    const list = groups[tab];
+    $("#projects").innerHTML = list.length ? list.map(card).join("") : `<div class="empty">Nothing here yet.</div>`;
+    restoreOpen($("#projects"), open);
+
+    const t = now(), act = groups.active;
+    const overdue = act.filter(p => p.dueAt && p.dueAt < t).length;
+    const soon = act.filter(p => p.dueAt && p.dueAt >= t && p.dueAt - t < 24 * HOUR).length;
+    const dueCents = projects.filter(p => p.status !== "cancelled").flatMap(p => p.payments).filter(x => x.status === "due").reduce((s, x) => s + x.amountCents, 0);
+    const unread = projects.filter(p => p.messages.length && p.messages[p.messages.length - 1].sender === "client").length;
+    $("#stats").innerHTML = `
+      <div class="stat"><b>${act.length}</b><span>Active projects</span></div>
+      <div class="stat${overdue ? " alert" : ""}"><b>${overdue}</b><span>Overdue</span></div>
+      <div class="stat${soon ? " soon" : ""}"><b>${soon}</b><span>Due in the next 24 hours</span></div>
+      <div class="stat"><b>${money(dueCents)}</b><span>Outstanding balances</span></div>
+      <div class="stat"><b>${groups.estimate.length}</b><span>Estimates waiting for approval</span></div>
+      <div class="stat${unread ? " soon" : ""}"><b>${unread}</b><span>Messages awaiting reply</span></div>`;
+    tickClocks();
+  }
+
+  async function load() {
+    const r = await api("/api/projects");
+    clockOffset = r.serverTime - Date.now();
+    projects = r.projects;
+    render();
+  }
+
+  $("#tabs").addEventListener("click", e => {
+    const b = e.target.closest("[data-tab]"); if (!b) return;
+    tab = b.dataset.tab;
+    $$("#tabs [data-tab]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+    render();
+  });
+
+  const root = $("#projects");
+  async function act(btn, fn, ok) {
+    btn.disabled = true;
+    try { await fn(); if (ok) toast(ok); await load(); }
+    catch (x) { toast(x.message, true); btn.disabled = false; }
+  }
+
+  root.addEventListener("click", e => {
+    const ext = e.target.closest("[data-extend]");
+    if (ext) {
+      const input = ext.closest("form").due;
+      const base = input.value ? new Date(input.value).getTime() : now();
+      input.value = toLocalInput(base + +ext.dataset.extend * HOUR);
+      return;
+    }
+    const ps = e.target.closest("[data-payment-status]");
+    if (ps) return act(ps, () => api(`/api/admin/payments/${encodeURIComponent(ps.dataset.paymentStatus)}`, { method: "PATCH", body: { status: ps.dataset.to } }), "Payment updated");
+    const dp = e.target.closest("[data-del-payment]");
+    if (dp && confirm("Remove this unpaid payment request?")) return act(dp, () => api(`/api/admin/payments/${encodeURIComponent(dp.dataset.delPayment)}`, { method: "DELETE" }), "Payment removed");
+    const df = e.target.closest("[data-del-file]");
+    if (df && confirm("Delete this file for good?")) return act(df, () => api(`/api/files/${encodeURIComponent(df.dataset.delFile)}`, { method: "DELETE" }), "File deleted");
+  });
+
+  root.addEventListener("submit", e => {
+    const up = e.target.closest("[data-update]");
+    const pay = e.target.closest("[data-add-payment]");
+    const notes = e.target.closest("[data-notes]");
+    if (!up && !pay && !notes) return;
+    e.preventDefault();
+    const btn = e.target.querySelector("button[type=submit]");
+    if (up) {
+      const p = projects.find(x => x.id === up.dataset.update);
+      const body = { status: up.status.value, update: up.update.value, notify: up.notify.checked };
+      if (up.due.value) { const ms = new Date(up.due.value).getTime(); if (ms !== p.dueAt && Math.abs(ms - (p.dueAt || 0)) >= 60000) body.dueAt = ms; }
+      return act(btn, () => api(`/api/admin/projects/${encodeURIComponent(p.id)}`, { method: "PATCH", body }), "Saved");
+    }
+    if (pay) return act(btn, () => api(`/api/admin/projects/${encodeURIComponent(pay.dataset.addPayment)}/payments`, { method: "POST", body: { label: pay.label.value, amount: pay.amount.value } }), "Payment requested");
+    if (notes) return act(btn, () => api(`/api/admin/projects/${encodeURIComponent(notes.dataset.notes)}`, { method: "PATCH", body: { notes: notes.notes.value } }), "Notes saved");
+  });
+  bindSharedForms(root, load);
+
+  // ---------- New project dialog ----------
+  const dlg = $("#new-dlg"), items = $("#n-items");
+  const addItem = (name = "", amount = "") => {
+    items.insertAdjacentHTML("beforeend", `<div class="it"><input class="input" placeholder="Item" maxlength="150" value="${esc(name)}"><input class="input" type="number" min="0" step="0.01" placeholder="Price" value="${esc(amount)}"><button class="x" type="button" aria-label="Remove item">&times;</button></div>`);
+  };
+  const updateTotal = () => {
+    const t = $$(".it", items).reduce((s, r) => s + (Number(r.children[1].value) || 0), 0);
+    $("#n-total").textContent = "Total: $" + t.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  };
+  $("#new-btn").addEventListener("click", () => { $("#new-form").reset(); items.innerHTML = ""; addItem(); updateTotal(); $("#n-error").hidden = true; dlg.showModal(); });
+  $("#add-item").addEventListener("click", () => { addItem(); updateTotal(); });
+  items.addEventListener("click", e => { if (e.target.closest(".x")) { e.target.closest(".it").remove(); updateTotal(); } });
+  items.addEventListener("input", updateTotal);
+  $$("[data-h]", dlg).forEach(b => b.addEventListener("click", () => $("#n-hours").value = b.dataset.h));
+  $$("[data-close]", dlg).forEach(b => b.addEventListener("click", () => dlg.close()));
+  $("#new-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const err = $("#n-error"), btn = e.target.querySelector("button[type=submit]");
+    err.hidden = true; btn.disabled = true;
+    try {
+      await api("/api/admin/projects", { method: "POST", body: {
+        clientEmail: $("#n-email").value, clientName: $("#n-name").value, title: $("#n-title").value,
+        service: $("#n-service").value, status: $("#n-type").value, durationHours: Number($("#n-hours").value),
+        items: $$(".it", items).map(r => ({ name: r.children[0].value, amount: r.children[1].value })),
+        schedule: SCHEDULES[$("#n-schedule").value], notes: $("#n-notes").value, notify: $("#n-notify").checked } });
+      dlg.close(); toast("Created");
+      tab = $("#n-type").value === "estimate" ? "estimate" : "active";
+      $$("#tabs [data-tab]").forEach(x => x.setAttribute("aria-selected", String(x.dataset.tab === tab)));
+      await load();
+    } catch (x) { err.textContent = x.message; err.hidden = false; }
+    finally { btn.disabled = false; }
+  });
+
+  $("#sign-out").addEventListener("click", signOut);
+
+  (async () => {
+    let me;
+    try { me = await api("/api/me"); } catch { $("#denied").hidden = false; return; }
+    if (!me.isAdmin) { $("#denied-msg").textContent = `You're signed in as ${me.email}, which isn't an admin account.`; $("#denied").hidden = false; return; }
+    $("#who").hidden = false; $("#who-email").textContent = me.email;
+    $("#dash").hidden = false;
+    await load().catch(x => toast(x.message, true));
+    setInterval(() => { if (!document.hidden && !isBusy(root) && !dlg.open) load().catch(() => {}); }, 60000);
+  })();
+})();
+</script>
+</body>
+</html>
