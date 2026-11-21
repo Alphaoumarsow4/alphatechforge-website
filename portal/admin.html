@@ -22,10 +22,21 @@
 <body>
 <header class="top"><div class="wrap">
   <a class="brand" href="/"><svg viewBox="0 0 40 46" fill="none" aria-hidden="true"><path d="M20 2 36 8v14c0 10-6 17-16 22C10 39 4 32 4 22V8L20 2Z" stroke="#D9B461" stroke-width="3"/><path d="m11 32 9-21 9 21M15 25h10" stroke="#F5F3EE" stroke-width="3.5" stroke-linecap="square"/><path d="M17 25h6" stroke="#F47A3B" stroke-width="3.5"/></svg><span>Alpha<b>Tech</b>Forge</span><small>Admin</small></a>
-  <div class="who" id="who" hidden><span id="who-email"></span><button class="btn small" type="button" id="sign-out">Sign out</button></div>
+  <div class="who" id="who" hidden><span id="who-email"></span><button class="btn small" type="button" id="account-btn">Account</button><button class="btn small" type="button" id="sign-out">Sign out</button></div>
 </div></header>
 
 <main class="wrap">
+  <section class="login" id="signin" hidden>
+    <span class="eyebrow">Admin</span><h1>Admin sign-in</h1>
+    <form id="pw-form" style="display:grid;gap:12px" novalidate>
+      <div class="field"><label for="pw-email">Email</label><input id="pw-email" type="email" autocomplete="username" required maxlength="150"></div>
+      <div class="field"><label for="pw-pass">Password</label><input id="pw-pass" type="password" autocomplete="current-password" required maxlength="200"></div>
+      <button class="btn primary" type="submit">Sign in</button>
+    </form>
+    <p class="error" id="pw-error" role="alert" hidden></p>
+    <p class="muted small">No password yet, or forgot it? <a href="/portal/">Sign in with an email link</a>, then set one under <b>Account</b>.</p>
+  </section>
+
   <section class="login" id="denied" hidden>
     <span class="eyebrow">Admin</span><h1>Admins only</h1>
     <p class="muted" id="denied-msg">Please sign in with your admin email.</p>
@@ -78,6 +89,21 @@
     <label class="check"><input type="checkbox" id="n-notify" checked> Email the client a link to their portal</label>
     <p class="error" id="n-error" role="alert" hidden></p>
     <div><button class="btn primary" type="submit">Create</button></div>
+  </form>
+</dialog>
+
+<dialog id="acct-dlg" aria-labelledby="acct-title" style="width:min(460px,calc(100% - 24px))">
+  <div class="d-head"><h2 id="acct-title">Account</h2><button class="x" type="button" data-close aria-label="Close">&times;</button></div>
+  <form class="d-body" id="acct-form" novalidate>
+    <p class="muted small" id="acct-status" style="margin:0"></p>
+    <input type="email" autocomplete="username" id="acct-user" hidden>
+    <div class="field" id="cur-wrap"><label for="cur-pass">Current password</label><input id="cur-pass" type="password" autocomplete="current-password" maxlength="200"></div>
+    <div class="field"><label for="new-pass">New password</label><input id="new-pass" type="password" autocomplete="new-password" minlength="12" maxlength="200" required>
+      <span class="muted small">At least 12 characters. A phrase of 3 or 4 unrelated words works well.</span></div>
+    <div class="field"><label for="new-pass2">Repeat new password</label><input id="new-pass2" type="password" autocomplete="new-password" maxlength="200" required></div>
+    <p class="error" id="acct-error" role="alert" hidden></p>
+    <div><button class="btn primary" type="submit">Save password</button></div>
+    <p class="muted small" style="margin:0">Saving signs you out on your other devices.</p>
   </form>
 </dialog>
 
@@ -253,9 +279,52 @@
 
   $("#sign-out").addEventListener("click", signOut);
 
+  // ---------- Password sign-in & account ----------
+  let meInfo = null;
+  $("#pw-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const err = $("#pw-error"), btn = e.target.querySelector("button");
+    err.hidden = true; btn.disabled = true;
+    try {
+      await api("/api/auth/password-login", { method: "POST", body: { email: $("#pw-email").value, password: $("#pw-pass").value } });
+      location.reload();
+    } catch (x) { err.textContent = x.message; err.hidden = false; btn.disabled = false; $("#pw-pass").select(); }
+  });
+
+  const acct = $("#acct-dlg");
+  $$("[data-close]", acct).forEach(b => b.addEventListener("click", () => acct.close()));
+  $("#account-btn").addEventListener("click", () => {
+    $("#acct-form").reset(); $("#acct-error").hidden = true;
+    $("#acct-user").value = meInfo.email;
+    const needCurrent = meInfo.hasPassword && !meInfo.canResetPassword;
+    $("#cur-wrap").hidden = !needCurrent;
+    $("#acct-status").textContent = !meInfo.hasPassword
+      ? "You don't have a password yet. Set one to sign in faster next time."
+      : needCurrent ? "Change your password." : "You just signed in, so you can set a new password without the old one.";
+    acct.showModal();
+  });
+  $("#acct-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const err = $("#acct-error"), btn = e.target.querySelector("button[type=submit]");
+    err.hidden = true;
+    if ($("#new-pass").value !== $("#new-pass2").value) { err.textContent = "The two new passwords don't match."; err.hidden = false; return; }
+    btn.disabled = true;
+    try {
+      await api("/api/auth/password", { method: "POST", body: { currentPassword: $("#cur-pass").value, newPassword: $("#new-pass").value } });
+      meInfo.hasPassword = true; acct.close(); toast("Password saved");
+    } catch (x) { err.textContent = x.message; err.hidden = false; }
+    finally { btn.disabled = false; }
+  });
+
   (async () => {
     let me;
-    try { me = await api("/api/me"); } catch { $("#denied").hidden = false; return; }
+    try { me = await api("/api/me"); }
+    catch (x) {
+      if (x.status === 401) { $("#signin").hidden = false; $("#pw-email").focus(); }
+      else { $("#denied-msg").textContent = x.message; $("#denied").hidden = false; }
+      return;
+    }
+    meInfo = me;
     if (!me.isAdmin) { $("#denied-msg").textContent = `You're signed in as ${me.email}, which isn't an admin account.`; $("#denied").hidden = false; return; }
     $("#who").hidden = false; $("#who-email").textContent = me.email;
     $("#dash").hidden = false;

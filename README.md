@@ -99,6 +99,10 @@ and due-soon projects highlighted, and is where projects, estimates, payment req
 - **Other services**: create an estimate in the admin dashboard. The client approves it by paying the first
   payment in their portal, which starts the countdown. Default delivery time is 36 hours (editable per project).
 - Updates, new files, messages and payment requests can email the client automatically.
+- **Admin passwords:** admins (emails in `ADMIN_EMAILS`) can set a password under **Account** in the admin
+  dashboard and then sign in at `/portal/admin.html` with email + password. Passwords are stored as salted
+  PBKDF2 hashes; 5 wrong attempts pause password sign-in for 15 minutes; changing the password signs out other
+  devices. Forgot it? Sign in with an email link, then set a new one within 15 minutes. Clients use email links only.
 
 ### Setup (one time)
 

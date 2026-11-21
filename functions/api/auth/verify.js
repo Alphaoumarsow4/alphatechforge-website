@@ -1,6 +1,6 @@
 // Step 2 of sign-in: exchange the one-time link token for a session cookie.
-import { handle, json, randomToken, readJson, sha256, HttpError } from "../../_lib/core.js";
-import { SESSION_DAYS, sessionCookie } from "../../_lib/auth.js";
+import { handle, json, readJson, sha256, HttpError } from "../../_lib/core.js";
+import { createSession } from "../../_lib/auth.js";
 import { ensureUser, getDb } from "../../_lib/db.js";
 
 export const onRequestPost = handle(async ({ request, env }) => {
@@ -21,16 +21,5 @@ export const onRequestPost = handle(async ({ request, env }) => {
   if (!used) throw new HttpError(400, "This sign-in link has expired or was already used. Please request a new one.");
 
   await ensureUser(db, used.email);
-  const session = randomToken(32);
-  await db
-    .prepare("INSERT INTO sessions (id_hash, email, expires_at, created_at) VALUES (?, ?, ?, ?)")
-    .bind(await sha256(session), used.email, now + SESSION_DAYS * 24 * 60 * 60 * 1000, now)
-    .run();
-  // Housekeeping: drop expired tokens and sessions.
-  await db.batch([
-    db.prepare("DELETE FROM login_tokens WHERE expires_at < ?").bind(now - 24 * 60 * 60 * 1000),
-    db.prepare("DELETE FROM sessions WHERE expires_at < ?").bind(now)
-  ]);
-
-  return json({ ok: true }, 200, { "Set-Cookie": sessionCookie(session, SESSION_DAYS * 24 * 60 * 60) });
+  return json({ ok: true }, 200, { "Set-Cookie": await createSession(db, used.email) });
 });

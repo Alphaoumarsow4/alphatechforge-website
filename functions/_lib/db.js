@@ -30,7 +30,10 @@ const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS files (
      id TEXT PRIMARY KEY, project_id TEXT NOT NULL, r2_key TEXT NOT NULL, filename TEXT NOT NULL,
      content_type TEXT, size INTEGER NOT NULL, uploaded_by TEXT NOT NULL, created_at INTEGER NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS stripe_events (id TEXT PRIMARY KEY, created_at INTEGER NOT NULL)`
+  `CREATE TABLE IF NOT EXISTS stripe_events (id TEXT PRIMARY KEY, created_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS credentials (
+     email TEXT PRIMARY KEY, hash TEXT NOT NULL, salt TEXT NOT NULL, iterations INTEGER NOT NULL,
+     failed_count INTEGER NOT NULL DEFAULT 0, locked_until INTEGER, updated_at INTEGER NOT NULL)`
 ];
 
 let schemaReady = false;
