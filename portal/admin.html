@@ -138,7 +138,12 @@
           </div>
           <div class="field"><label>Update for the client (optional)</label><textarea name="update" maxlength="1000" placeholder="e.g. Homepage design is ready for your review."></textarea></div>
           <label class="check"><input type="checkbox" name="notify" checked> Email the client about this update</label>
-          <div><button class="btn primary small" type="submit">Save changes</button></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn primary small" type="submit">Save changes</button>
+            ${p.status === "done" || p.status === "cancelled"
+              ? `<button class="btn small" type="button" data-reopen="${p.id}">Reopen project</button>`
+              : `<button class="btn small" type="button" data-complete="${p.id}" style="border-color:var(--ok);color:var(--ok)">✓ Mark as completed</button>`}
+          </div>
         </form>
 
         <details class="sec" data-key="${p.id}-pay"><summary>Items &amp; payments <span class="muted small">${money(paid)} paid${due ? ` · ${money(due)} due` : ""}</span></summary><div class="inner">
@@ -217,6 +222,22 @@
       const base = input.value ? new Date(input.value).getTime() : now();
       input.value = toLocalInput(base + +ext.dataset.extend * HOUR);
       return;
+    }
+    const done = e.target.closest("[data-complete]");
+    if (done) {
+      const form = done.closest("form"), p = projects.find(x => x.id === done.dataset.complete);
+      const due = p.payments.filter(x => x.status === "due").reduce((s, x) => s + x.amountCents, 0);
+      const ask = `Mark "${p.title}" as completed?` + (due ? `\n\nNote: ${money(due)} is still unpaid on this project.` : "") +
+        (form.notify.checked ? "\n\nThe client will get an email." : "");
+      if (!confirm(ask)) return;
+      return act(done, () => api(`/api/admin/projects/${encodeURIComponent(p.id)}`, { method: "PATCH",
+        body: { status: "done", update: form.update.value || "Your project is complete.", notify: form.notify.checked } }), "Marked as completed");
+    }
+    const reopen = e.target.closest("[data-reopen]");
+    if (reopen) {
+      const p = projects.find(x => x.id === reopen.dataset.reopen);
+      if (!confirm(`Reopen "${p.title}"? It moves back to Active (stage: Review).`)) return;
+      return act(reopen, () => api(`/api/admin/projects/${encodeURIComponent(p.id)}`, { method: "PATCH", body: { status: "review", notify: false } }), "Project reopened");
     }
     const ps = e.target.closest("[data-payment-status]");
     if (ps) return act(ps, () => api(`/api/admin/payments/${encodeURIComponent(ps.dataset.paymentStatus)}`, { method: "PATCH", body: { status: ps.dataset.to } }), "Payment updated");
