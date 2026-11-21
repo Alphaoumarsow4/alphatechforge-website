@@ -100,7 +100,9 @@ async function createProjectFromBooking(db, env, session, origin) {
     ...addons.map(a => ({ name: a.name, amountCents: Math.round(a.price * 100) }))];
   const total = items.reduce((s, i) => s + i.amountCents, 0);
   const payments = splitPayments(total, pkg.schedule);
-  const hours = pkg.durationHours || 36;
+  // Add-ons like Rush delivery shorten the delivery time (speedFactor 0.5 = half the time).
+  const speed = addons.reduce((f, a) => f * (a.speedFactor || 1), 1);
+  const hours = Math.max(1, Math.round((pkg.durationHours || 36) * speed));
   const notes = [
     meta.notes && meta.notes !== "-" ? `Client notes: ${meta.notes}` : "",
     String(meta.care_plan || "").startsWith("requested") ? `Care plan requested (${money(catalog.carePlan.price * 100)}/month from launch).` : ""

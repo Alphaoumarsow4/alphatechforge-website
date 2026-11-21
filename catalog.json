@@ -1,6 +1,6 @@
 {
   "currency": "usd",
-  "termsVersion": "2026-11-17",
+  "termsVersion": "2026-11-21",
   "packages": [
     {
       "id": "starter",
@@ -45,7 +45,7 @@
     { "id": "copy", "name": "Copywriting", "price": 250, "note": "Text for up to 5 pages" },
     { "id": "page", "name": "Extra page or section", "price": 300, "note": "Beyond your package allowance" },
     { "id": "booking", "name": "Online booking setup", "price": 250, "note": "Appointments or reservations" },
-    { "id": "rush", "name": "Rush delivery", "price": 300, "note": "Launch in about 2 weeks" }
+    { "id": "rush", "name": "Rush delivery", "price": 300, "note": "Delivered in half the time", "speedFactor": 0.5 }
   ],
   "carePlan": {
     "name": "Care plan",

@@ -641,16 +641,25 @@ dialog::backdrop{background:#04060ad0;backdrop-filter:blur(3px)}
     const from = Math.min(...catalog.packages.map(p => p.price));
     $('#web-from').textContent = 'Packages from ' + money(from * 100); $('#web-from').hidden = false;
     $('#addon-list').innerHTML = '<legend>Add-ons (optional)</legend>' + catalog.addons.map(a => `
-      <label class="check"><input type="checkbox" name="addon" value="${esc(a.id)}"><span class="nm">${esc(a.name)}<small>${esc(a.note)}</small></span><span class="pr">+${money(a.price * 100)}</span></label>`).join('');
+      <label class="check"><input type="checkbox" name="addon" value="${esc(a.id)}"><span class="nm">${esc(a.name)}<small data-note="${esc(a.id)}">${esc(a.note)}</small></span><span class="pr">+${money(a.price * 100)}</span></label>`).join('');
     $('#care-text').innerHTML = `Add the ${esc(catalog.carePlan.name)} after launch<small>${esc(catalog.carePlan.note)} Not charged today.</small>`;
     $('#care-price').textContent = money(catalog.carePlan.price * 100) + '/mo';
   }
   function renderSchedule() {
     const ids = [...document.querySelectorAll('#addon-list input:checked')].map(i => i.value);
     const { total, parts } = plan(chosen, ids);
+    // Delivery time: add-ons like Rush shorten it (same rule as functions/api/stripe-webhook.js).
+    const base = chosen.durationHours || 36;
+    const speed = ids.reduce((f, id) => f * (catalog.addons.find(a => a.id === id).speedFactor || 1), 1);
+    const hours = Math.max(1, Math.round(base * speed));
+    catalog.addons.filter(a => a.speedFactor).forEach(a => {
+      const note = document.querySelector(`[data-note="${a.id}"]`);
+      if (note) note.textContent = `Delivered within ${Math.max(1, Math.round(base * a.speedFactor))} hours instead of ${base}`;
+    });
     $('#sched').innerHTML = `<div><span>Project total</span><span>${money(total)}</span></div>` +
       parts.slice(1).map(p => `<div><span>${esc(p.label)} (${p.percent}%)</span><span>${money(p.amt)}</span></div>`).join('') +
       ($('#care-plan').checked ? `<div><span>${esc(catalog.carePlan.name)}, from launch</span><span>${money(catalog.carePlan.price * 100)}/mo</span></div>` : '') +
+      `<div><span>Delivery</span><span>within ${hours} hours of payment</span></div>` +
       `<div class="due"><span>Due today${parts.length > 1 ? ' (' + parts[0].percent + '%)' : ''}</span><span>${money(parts[0].amt)}</span></div>`;
   }
   document.addEventListener('click', e => {
